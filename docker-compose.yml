@@ -8,11 +8,11 @@ services:
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=shared_db
     networks:
       - didomi_network
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
 
   rabbitmq:
     image: rabbitmq:4.1-rc-management
