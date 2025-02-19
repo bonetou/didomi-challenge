@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:17.3-alpine
+    container_name: didomi_challenge_db
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=shared_db
+    networks:
+      - didomi_network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:4.1-rc-management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - didomi_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  didomi_network:
+    driver: bridge
