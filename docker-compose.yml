@@ -26,6 +26,32 @@ services:
     networks:
       - didomi_network
 
+  users:
+    build:
+      context: .
+      dockerfile: ./apps/users/Dockerfile
+      target: development
+    command: npm run start:dev users
+    env_file:
+      - ./apps/users/.env
+    ports:
+      - 3001:3001
+    volumes:
+      - .:/usr/src/app
+
+  consents:
+    build:
+      context: .
+      dockerfile: ./apps/consents/Dockerfile
+      target: development
+    command: npm run start:dev consents
+    env_file:
+      - ./apps/consents/.env
+    ports:
+      - 3002:3002
+    volumes:
+      - .:/usr/src/app
+
 volumes:
   postgres_data:
     driver: local
