@@ -6,6 +6,7 @@ import { UseCase } from './use-case.interface';
 import { EventBus } from '../events/event-bus.interface';
 import { UserEvents } from '../../domain/events/user-events.enum';
 import { UserCreatedEvent } from '../../domain/events/user-created.event';
+import { UserWithEmailAlreadyExistsError } from '../errors/user-with-email-already-exists.error';
 
 @Injectable()
 export class CreateUserUseCase implements UseCase<string, UserAggregate> {
@@ -17,10 +18,16 @@ export class CreateUserUseCase implements UseCase<string, UserAggregate> {
   ) {}
 
   async execute(email: string): Promise<UserAggregate> {
+    const userExists = await this.userRepository.exists(email);
+
+    if (userExists) {
+      throw new UserWithEmailAlreadyExistsError(email);
+    }
+
     const userAggregate = UserFactory.create(email);
 
     await this.userRepository.create(userAggregate);
-    await this.eventBus.publish(
+    this.eventBus.publish(
       UserEvents.UserCreated,
       new UserCreatedEvent(userAggregate.user.id, userAggregate.user.email),
     );

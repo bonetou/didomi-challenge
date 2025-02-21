@@ -16,9 +16,6 @@ export class DeleteUserUseCase implements UseCase<string, void> {
 
   async execute(email: string): Promise<void> {
     await this.userRepository.delete(email);
-    await this.eventBus.publish(
-      UserEvents.UserDeleted,
-      new UserDeletedEvent(email),
-    );
+    this.eventBus.publish(UserEvents.UserDeleted, new UserDeletedEvent(email));
   }
 }

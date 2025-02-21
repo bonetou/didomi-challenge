@@ -1,3 +1,3 @@
 export interface EventBus {
-  publish: (eventName: string, payload: any) => Promise<void>;
+  publish: (eventName: string, payload: any) => void;
 }

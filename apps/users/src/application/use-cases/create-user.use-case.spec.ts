@@ -25,6 +25,7 @@ describe('CreateUserUseCase', () => {
           provide: 'USER_REPOSITORY',
           useValue: {
             create: jest.fn().mockResolvedValue(undefined),
+            exists: jest.fn().mockResolvedValue(false),
           },
         },
         {
@@ -61,6 +62,18 @@ describe('CreateUserUseCase', () => {
       UserEvents.UserCreated,
       new UserCreatedEvent(userAggregate.user.id, userAggregate.user.email),
     );
+  });
+
+  it('should throw an error if the user already exists', async () => {
+    const email = 'test@example.com';
+    userRepository.exists.mockResolvedValue(true);
+
+    await expect(useCase.execute(email)).rejects.toThrow(
+      `User with email ${email} already exists`,
+    );
+
+    expect(userRepository.create).not.toHaveBeenCalled();
+    expect(eventBus.publish).not.toHaveBeenCalled();
   });
 
   it('should throw an error if saving the user fails', async () => {
