@@ -1,5 +1,5 @@
 export enum UserEvents {
-  UserCreated = 'UserCreated',
-  UserDeleted = 'UserDeleted',
-  ConsentUpdated = 'ConsentUpdated',
+  UserCreated = 'user.created',
+  UserUpdated = 'user.updated',
+  UserDeleted = 'user.deleted',
 }
