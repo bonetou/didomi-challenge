@@ -17,6 +17,9 @@ describe('DeleteUserUseCase', () => {
         {
           provide: 'USER_REPOSITORY',
           useValue: {
+            findByEmail: jest.fn().mockResolvedValue({
+              user: { id: '123' },
+            }),
             delete: jest.fn().mockResolvedValue(undefined),
           },
         },
@@ -45,8 +48,18 @@ describe('DeleteUserUseCase', () => {
     expect(eventBus.publish).toHaveBeenCalledTimes(1);
     expect(eventBus.publish).toHaveBeenCalledWith(
       UserEvents.UserDeleted,
-      new UserDeletedEvent(email),
+      new UserDeletedEvent('123', email),
     );
+  });
+
+  it('should do nothing if the user does not exist', async () => {
+    const email = 'non-existing@example.com';
+    userRepository.findByEmail.mockResolvedValue(null);
+
+    await expect(useCase.execute(email)).resolves.toBeUndefined();
+
+    expect(userRepository.delete).not.toHaveBeenCalled();
+    expect(eventBus.publish).not.toHaveBeenCalled();
   });
 
   it('should throw an error if deleting the user fails', async () => {

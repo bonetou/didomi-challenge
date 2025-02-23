@@ -8,21 +8,27 @@ import {
   UsePipes,
   ValidationPipe,
   Query,
+  Delete,
 } from '@nestjs/common';
 import { CreateUserUseCase } from '../../../application/use-cases/create-user.use-case';
-import { CreateUserDto } from '../dtos/request/create-user.dto';
+import {
+  CreateUserDto,
+  DeleteUserDto,
+  GetUserDto,
+} from '../dtos/request/user.dto';
 import { UserResponseDto } from '../dtos/response/user-response.dto';
 import { UserWithEmailAlreadyExistsError } from '../../../application/errors/user-with-email-already-exists.error';
 import { UserDTOMapper } from '../mappers/user.mapper';
-import { GetUserDto } from '../dtos/request/get-user.dto';
-import { GetUserUseCase } from 'apps/users/src/application/use-cases/get-user.use-case';
-import { UserDoesNotExistError } from 'apps/users/src/application/errors/user-does-not-exist.error';
+import { GetUserUseCase } from '../../../application/use-cases/get-user.use-case';
+import { UserDoesNotExistError } from '../../../application/errors/user-does-not-exist.error';
+import { DeleteUserUseCase } from '../../../application/use-cases/delete-user.use-case';
 
 @Controller('users')
 export class UserController {
   constructor(
     private readonly createUserUseCase: CreateUserUseCase,
     private readonly getUserUseCase: GetUserUseCase,
+    private readonly deleteUserUseCase: DeleteUserUseCase,
   ) {}
 
   @Post()
@@ -60,5 +66,13 @@ export class UserController {
       }
       throw error;
     }
+  }
+
+  @Delete()
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async deleteUserByEmail(
+    @Query() deleteUserDto: DeleteUserDto,
+  ): Promise<void> {
+    await this.deleteUserUseCase.execute(deleteUserDto.email);
   }
 }

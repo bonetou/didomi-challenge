@@ -8,6 +8,7 @@ import { RabbitMQEventBus } from '../../infrastructure/messaging/rabbitmq-event-
 import { CreateUserUseCase } from '../../application/use-cases/create-user.use-case';
 import { ConsentModel } from '../../infrastructure/database/models/consent.model';
 import { GetUserUseCase } from './get-user.use-case';
+import { DeleteUserUseCase } from './delete-user.use-case';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { GetUserUseCase } from './get-user.use-case';
   providers: [
     CreateUserUseCase,
     GetUserUseCase,
-
+    DeleteUserUseCase,
     {
       provide: 'USER_REPOSITORY',
       useClass: TypeOrmUserRepository,
@@ -27,6 +28,6 @@ import { GetUserUseCase } from './get-user.use-case';
       useClass: RabbitMQEventBus,
     },
   ],
-  exports: [CreateUserUseCase, GetUserUseCase],
+  exports: [CreateUserUseCase, GetUserUseCase, DeleteUserUseCase],
 })
 export class UseCasesModule {}
