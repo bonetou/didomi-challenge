@@ -4,4 +4,5 @@ export interface UserRepository {
   create: (user: UserAggregate) => Promise<void>;
   findByEmail: (email: string) => Promise<UserAggregate | null>;
   delete: (email: string) => Promise<void>;
+  exists: (email: string) => Promise<boolean>;
 }
