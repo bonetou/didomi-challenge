@@ -9,6 +9,9 @@ export class UserModel {
   @Column({ unique: true })
   email: string;
 
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
   @OneToMany(() => ConsentModel, (consent) => consent.user, { cascade: true })
   consents: ConsentModel[];
 }
