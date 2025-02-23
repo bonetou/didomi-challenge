@@ -33,7 +33,7 @@ services:
       target: development
     depends_on:
       - postgres
-    command: sh -c "npm run migration:run && npm run start:dev users"
+    command: sh -c "npm run migration:users:run && npm run start:dev users"
     env_file:
       - ./apps/users/.env
     ports:
@@ -50,7 +50,7 @@ services:
       target: development
     depends_on:
       - postgres
-    command: sh -c "npm run migration:run && npm run start:dev consents"
+    command: sh -c "npm run migration:consents:run && npm run start:dev consents"
     env_file:
       - ./apps/consents/.env
     ports:
