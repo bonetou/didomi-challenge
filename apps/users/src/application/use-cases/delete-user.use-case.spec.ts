@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DeleteUserUseCase } from './delete-user.use-case';
 import { UserRepository } from '../../domain/repositories/user.repository';
-import { EventBus } from '../events/event-bus.interface';
 import { UserEvents } from '../../domain/events/user-events.enum';
 import { UserDeletedEvent } from '../../domain/events/user-deleted.event';
+import { EventBus } from '@app/messaging';
 
 describe('DeleteUserUseCase', () => {
   let useCase: DeleteUserUseCase;

@@ -19,6 +19,33 @@
         "tsConfigPath": "apps/consents/tsconfig.app.json"
       }
     },
+    "database": {
+      "type": "library",
+      "root": "libs/database",
+      "entryFile": "index",
+      "sourceRoot": "libs/database/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/database/tsconfig.lib.json"
+      }
+    },
+    "lib": {
+      "type": "library",
+      "root": "libs/lib",
+      "entryFile": "index",
+      "sourceRoot": "libs/lib/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/lib/tsconfig.lib.json"
+      }
+    },
+    "messaging": {
+      "type": "library",
+      "root": "libs/messaging",
+      "entryFile": "index",
+      "sourceRoot": "libs/messaging/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/messaging/tsconfig.lib.json"
+      }
+    },
     "users": {
       "type": "application",
       "root": "apps/users",

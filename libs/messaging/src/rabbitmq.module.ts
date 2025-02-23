@@ -1,7 +1,8 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
+@Global()
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -15,7 +16,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           transport: Transport.RMQ,
           options: {
             urls: [configService.getOrThrow<string>('RABBITMQ_URL')],
-            queue: 'users_queue',
+            queue: configService.getOrThrow<string>('RABBITMQ_QUEUE'),
             queueOptions: { durable: true },
           },
         }),

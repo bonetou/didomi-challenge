@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { EventBus } from '../../application/events/event-bus.interface';
+import { EventBus } from './event-bus.interface';
 
 @Injectable()
 export class RabbitMQEventBus implements EventBus {

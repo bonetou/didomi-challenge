@@ -3,10 +3,10 @@ import { UserAggregate } from '../../domain/aggregates/user.aggregate';
 import { UserRepository } from '../../domain/repositories/user.repository';
 import { UserFactory } from '../../domain/factories/user.factory';
 import { UseCase } from './use-case.interface';
-import { EventBus } from '../events/event-bus.interface';
 import { UserEvents } from '../../domain/events/user-events.enum';
 import { UserCreatedEvent } from '../../domain/events/user-created.event';
 import { UserWithEmailAlreadyExistsError } from '../errors/user-with-email-already-exists.error';
+import { EventBus } from '@app/messaging';
 
 @Injectable()
 export class CreateUserUseCase implements UseCase<string, UserAggregate> {

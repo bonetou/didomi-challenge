@@ -17,6 +17,25 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    "paths": {}
+    "paths": {
+      "@app/database": [
+        "libs/database/src"
+      ],
+      "@app/database/*": [
+        "libs/database/src/*"
+      ],
+      "@app/lib": [
+        "libs/lib/src"
+      ],
+      "@app/lib/*": [
+        "libs/lib/src/*"
+      ],
+      "@app/messaging": [
+        "libs/messaging/src"
+      ],
+      "@app/messaging/*": [
+        "libs/messaging/src/*"
+      ]
+    }
   }
 }

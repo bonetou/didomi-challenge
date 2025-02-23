@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { UserRepository } from '../../domain/repositories/user.repository';
 import { UseCase } from './use-case.interface';
-import { EventBus } from '../events/event-bus.interface';
 import { UserEvents } from '../../domain/events/user-events.enum';
 import { UserDeletedEvent } from '../../domain/events/user-deleted.event';
+import { EventBus } from '@app/messaging';
 
 @Injectable()
 export class DeleteUserUseCase implements UseCase<string, void> {

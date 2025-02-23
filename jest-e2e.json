@@ -2,5 +2,6 @@
   "projects": [
     "<rootDir>/apps/users/test/jest-e2e.json",
     "<rootDir>/apps/consents/test/jest-e2e.json"
-  ]
+  ],
+  "passWithNoTests": true
 }

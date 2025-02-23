@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateUserUseCase } from './create-user.use-case';
 import { UserRepository } from '../../domain/repositories/user.repository';
-import { EventBus } from '../events/event-bus.interface';
 import { UserFactory } from '../../domain/factories/user.factory';
 import { UserAggregate } from '../../domain/aggregates/user.aggregate';
 import { UserCreatedEvent } from '../../domain/events/user-created.event';
 import { UserEvents } from '../../domain/events/user-events.enum';
 import { randomUUID } from 'crypto';
+import { EventBus } from '@app/messaging';
 
 jest.mock('crypto', () => ({
   randomUUID: jest.fn(),

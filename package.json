@@ -23,7 +23,10 @@
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "migration:generate": "name=$npm_config_name && timestamp=$(date +%Y%m%d%H%M%S) && npm run typeorm -- migration:generate ./apps/users/src/infrastructure/database/migrations/${name}${timestamp} -d apps/users/src/infrastructure/database/datasource.ts",
     "migration:run": "npm run typeorm -- migration:run -d apps/users/src/infrastructure/database/datasource.ts",
-    "migration:revert": "npm run typeorm -- migration:revert -d apps/users/src/infrastructure/database/datasource.ts"
+    "migration:revert": "npm run typeorm -- migration:revert -d apps/users/src/infrastructure/database/datasource.ts",
+    "migration:consents:generate": "name=$npm_config_name && timestamp=$(date +%Y%m%d%H%M%S) && npm run typeorm -- migration:generate ./apps/consents/src/database/migrations/${name}${timestamp} -d apps/consents/src/database/datasource.ts",
+    "migration:consents:run": "npm run typeorm -- migration:run -d apps/consents/src/database/datasource.ts",
+    "migration:consents:revert": "npm run typeorm -- migration:revert -d apps/consents/src/database/datasource.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -87,7 +90,13 @@
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/apps/"
-    ]
+      "<rootDir>/apps/",
+      "<rootDir>/libs/"
+    ],
+    "moduleNameMapper": {
+      "^@app/database(|/.*)$": "<rootDir>/libs/database/src/$1",
+      "^@app/lib(|/.*)$": "<rootDir>/libs/lib/src/$1",
+      "^@app/messaging(|/.*)$": "<rootDir>/libs/messaging/src/$1"
+    }
   }
 }
