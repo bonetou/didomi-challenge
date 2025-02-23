@@ -36,13 +36,13 @@ describe('GetUserUseCase', () => {
     expect(userRepository.findByEmail).toHaveBeenCalledWith(email);
   });
 
-  it('should return null if user is not found', async () => {
+  it('should throw an error if user does not exist found', async () => {
     const email = 'test@example.com';
     userRepository.findByEmail.mockResolvedValue(null);
 
-    await expect(useCase.execute(email)).resolves.toBeNull();
-    expect(userRepository.findByEmail).toHaveBeenCalledTimes(1);
-    expect(userRepository.findByEmail).toHaveBeenCalledWith(email);
+    await expect(useCase.execute(email)).rejects.toThrow(
+      `User with email ${email} does not exist`,
+    );
   });
 
   it('should throw an error if repository throws', async () => {
