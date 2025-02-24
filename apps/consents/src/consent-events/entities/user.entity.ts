@@ -1,15 +1,17 @@
 import {
   Column,
   Entity,
-  PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToMany,
+  PrimaryColumn,
 } from 'typeorm';
+import { ConsentEvent } from './consent-events.entity';
 
 @Entity('users')
 export class User {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('uuid')
   id: string;
 
   @Column({ unique: true })
@@ -23,4 +25,7 @@ export class User {
 
   @DeleteDateColumn({ nullable: true })
   deletedAt?: Date;
+
+  @OneToMany(() => ConsentEvent, (consent) => consent.user)
+  consents: ConsentEvent[];
 }

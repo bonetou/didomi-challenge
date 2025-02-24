@@ -1,3 +1,3 @@
 export enum ConsentEvents {
-  ConsentCreated = 'consent.created',
+  ConsentChanged = 'consent.changed',
 }

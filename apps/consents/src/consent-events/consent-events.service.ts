@@ -1,22 +1,34 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateConsentEventDto } from './dto/create-consent-event.dto';
 import { EventBus } from '@app/messaging';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ConsentCreatedEvent } from './events/consent-created.event';
+import { ConsentChangedEvent } from './events/consent-changed.event';
 import { ConsentEvents } from './events/consent-events.enum';
 import { ConsentEvent } from './entities/consent-events.entity';
+import { User } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class ConsentEventsService {
   constructor(
     @InjectRepository(ConsentEvent)
     private readonly consentRepository: Repository<ConsentEvent>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     @Inject('EVENT_BUS')
     private readonly eventBus: EventBus,
   ) {}
 
   async processConsentEvent(consentEventDto: CreateConsentEventDto) {
+    const user = await this.userRepository.findOne({
+      where: { id: consentEventDto.userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
     await this.consentRepository.save({
       userId: consentEventDto.userId,
       consentId: consentEventDto.consentId,
@@ -26,7 +38,18 @@ export class ConsentEventsService {
   }
 
   publishConsentEvent(consentEventDto: CreateConsentEventDto) {
-    const event: ConsentCreatedEvent = { ...consentEventDto };
-    this.eventBus.publish(ConsentEvents.ConsentCreated, event);
+    const event: ConsentChangedEvent = { ...consentEventDto };
+    this.eventBus.publish(ConsentEvents.ConsentChanged, event);
+  }
+
+  async createUser(createUserDto: CreateUserDto) {
+    await this.userRepository.save({
+      id: createUserDto.userId,
+      email: createUserDto.email,
+    });
+  }
+
+  async softDeleteUser(userId: string) {
+    await this.userRepository.softDelete(userId);
   }
 }

@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  CreateDateColumn,
+} from 'typeorm';
 import { ConsentModel } from './consent.model';
 
 @Entity('users')
@@ -9,9 +15,12 @@ export class UserModel {
   @Column({ unique: true })
   email: string;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   createdAt: Date;
 
-  @OneToMany(() => ConsentModel, (consent) => consent.user, { cascade: true })
+  @OneToMany(() => ConsentModel, (consent) => consent.user, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   consents: ConsentModel[];
 }

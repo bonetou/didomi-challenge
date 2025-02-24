@@ -41,7 +41,7 @@ describe('GetUserUseCase', () => {
     userRepository.findByEmail.mockResolvedValue(null);
 
     await expect(useCase.execute(email)).rejects.toThrow(
-      `User with email ${email} does not exist`,
+      `User ${email} does not exist`,
     );
   });
 

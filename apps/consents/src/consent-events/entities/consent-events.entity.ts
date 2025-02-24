@@ -3,7 +3,9 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
+  ManyToOne,
 } from 'typeorm';
+import { User } from './user.entity';
 
 @Entity('consent_events')
 export class ConsentEvent {
@@ -21,4 +23,7 @@ export class ConsentEvent {
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
+
+  @ManyToOne(() => User, (user) => user.consents, { onDelete: 'NO ACTION' })
+  user: User;
 }
