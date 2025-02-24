@@ -1,99 +1,154 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Table of Contents
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+1. [About this Project](#about-this-project)
+2. [Overview](#overview)
+3. [Project Structure](#project-structure)
+4. [Running the Project](#running-the-project)
+   - [Install Docker & Docker Compose](#1%EF%B8%8F%E2%83%A3-install-docker--docker-compose)
+   - [Configure Environment Variables](#2%EF%B8%8F%E2%83%A3-configure-environment-variables)
+   - [Start the Project](#3%EF%B8%8F%E2%83%A3-start-the-project)
+5. [Logs and services](#logs-and-services)
+6. [Running Tests](#running-tests)
+7. [API Docs (Swagger)](#api-docs-swagger)
+8. [Database Migrations](#database-migrations)
+   - [Generate New Migrations](#generate-new-migrations)
+   - [Apply Migrations](#apply-migrations)
+     - [Restart Docker Services](#option-1-restart-docker-services)
+     - [Run Migrations Manually](#option-2-run-migrations-manually)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+# About this Project
+This project was made for the **Didomi Backend Engineering Challenge**.  
+Challenge details: [Didomi Backend Challenge](https://github.com/didomi/challenges/tree/master/backend)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Project setup
+# Overview
 
-```bash
-$ npm install
+This is a monorepo which includes the users and consents services, along with a shared library. To showcase my skills effectively, I applied Domain-Driven Design (DDD) principles and followed Clean Architecture for the users service. For the consents service, I opted for a simpler approach, adhering to NestJS's default modular structure.
+
+I have used one PostgreSQL database for each service and RabbitMQ for messaging and communication between both.
+
+## Project Structure
+
+```
+/monorepo-root
+  /apps       
+    /consents
+    /users    
+  /libs       
+    /common   
+    /messaging
+    /database
 ```
 
-## Compile and run the project
+---
+
+# Running the Project
+
+### 1️. Install Docker & Docker Compose
+This project uses **Docker** and **Docker Compose** for containerized execution. Ensure both are installed.
+
+### 2️. Configure Environment Variables
+Each service requires a `.env` file. Copy the example files and rename them:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+cp apps/consents/.env.example apps/consents/.env
+cp apps/users/.env.example apps/users/.env
 ```
 
-## Run tests
+### 3️. Start the Project
+Run the following command to start all services in **detached mode**:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+docker compose up -d
 ```
 
-## Deployment
+---
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+# Logs and services
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## To view the logs of the **users** and **consents** services, run:
 
 ```bash
-$ npm install -g mau
-$ mau deploy
+docker compose logs -f users
+docker compose logs -f consents
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## PostgreSQL
+### Users Service DB
+```
+DB_HOST=postgres
+DB_PORT=5432
+DB_USER=root
+DB_PASSWORD=root
+DB_NAME=users_db
+```
 
-## Resources
+### Consents Service DB
+```
+DB_PORT=5432
+DB_USER=root
+DB_PASSWORD=root
+DB_NAME=consents_db
+```
+## RabbitMQ
+- Go to http://localhost:15672 to check RabbitMQ messages and queues.
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+# Running Tests
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Run all **unit tests**:
+```bash
+npm run test
+```
 
-## Support
+Run **unit tests for a specific service**:
+```bash
+# Users service tests
+npm run test apps/users
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# Consents service tests
+npm run test apps/consents
+```
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+# API Docs (Swagger)
+Each service provides **Swagger API documentation**:
 
-## License
+- **Users API Docs** → [http://localhost:3001/docs](http://localhost:3001/docs)
+- **Consents API Docs** → [http://localhost:3002/docs](http://localhost:3002/docs)
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+---
+
+# Database Migrations
+
+### Generate New Migrations
+To generate a new migration, run the appropriate command for the service:
+
+```bash
+export DB_HOST=localhost && npm run migration:users:generate --name=MigrationName
+```
+
+```bash
+export DB_HOST=localhost && npm run migration:consents:generate --name=MigrationName
+```
+
+### Apply Migrations
+You can apply new migrations in two ways:
+
+#### **Option 1: Restart Docker Services**
+```bash
+docker compose restart
+```
+
+#### **Option 2: Run Migrations Manually**
+```bash
+export DB_HOST=localhost && npm run migration:users:run
+```
+```bash
+export DB_HOST=localhost && npm run migration:consents:run
+```
+
