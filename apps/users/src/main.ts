@@ -1,9 +1,9 @@
-import { ValidationPipe, HttpException, HttpStatus } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
+import { GlobalValidationPipe } from '@app/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,23 +16,7 @@ async function bootstrap() {
   );
   const port = configService.getOrThrow<number>('PORT');
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      exceptionFactory: (errors) => {
-        return new HttpException(
-          {
-            statusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-            message: errors.map(
-              (e) =>
-                `${e.property}: ${Object.values(e.constraints || {}).join()}`,
-            ),
-            error: 'Unprocessable Entity',
-          },
-          HttpStatus.UNPROCESSABLE_ENTITY,
-        );
-      },
-    }),
-  );
+  app.useGlobalPipes(new GlobalValidationPipe());
 
   const config = new DocumentBuilder()
     .setTitle('Users')

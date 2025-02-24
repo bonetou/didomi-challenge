@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { HttpException, HttpStatus, ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
+import { GlobalValidationPipe } from '@app/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -22,23 +22,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      exceptionFactory: (errors) => {
-        return new HttpException(
-          {
-            statusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-            message: errors.map(
-              (e) =>
-                `${e.property}: ${Object.values(e.constraints || {}).join()}`,
-            ),
-            error: 'Unprocessable Entity',
-          },
-          HttpStatus.UNPROCESSABLE_ENTITY,
-        );
-      },
-    }),
-  );
+  app.useGlobalPipes(new GlobalValidationPipe());
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
