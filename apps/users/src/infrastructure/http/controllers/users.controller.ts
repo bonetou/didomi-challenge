@@ -2,13 +2,13 @@ import {
   Controller,
   Post,
   Body,
-  HttpException,
-  HttpStatus,
   Get,
   UsePipes,
   ValidationPipe,
   Query,
   Delete,
+  UnprocessableEntityException,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateUserUseCase } from '../../../application/use-cases/create-user.use-case';
 import {
@@ -40,10 +40,7 @@ export class UserController {
       return UserDTOMapper.toResponse(user);
     } catch (error) {
       if (error instanceof UserWithEmailAlreadyExistsError) {
-        throw new HttpException(
-          { message: error.message },
-          HttpStatus.UNPROCESSABLE_ENTITY,
-        );
+        throw new UnprocessableEntityException(error.message);
       }
       throw error;
     }
@@ -59,10 +56,7 @@ export class UserController {
       return UserDTOMapper.toResponse(user);
     } catch (error) {
       if (error instanceof UserDoesNotExistError) {
-        throw new HttpException(
-          { message: error.message },
-          HttpStatus.NOT_FOUND,
-        );
+        throw new NotFoundException(error.message);
       }
       throw error;
     }

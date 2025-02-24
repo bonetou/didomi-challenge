@@ -19,7 +19,7 @@ export class UserAggregateMapper {
       email: userAggregate.user.email,
       consents: userAggregate.getCurrentConsents().map((c) => ({
         id: c.id,
-        userId: userAggregate.user.id, // 🔥 Ensure userId is explicitly set
+        userId: userAggregate.user.id,
         enabled: c.enabled,
         user: { id: userAggregate.user.id, email: userAggregate.user.email },
       })),
