@@ -46,7 +46,6 @@ I have used one PostgreSQL database for each service and RabbitMQ for messaging 
 ---
 
 # Running the Project
-
 ### 1️. Install Docker & Docker Compose
 This project uses **Docker** and **Docker Compose** for containerized execution. Ensure both are installed.
 
@@ -64,6 +63,8 @@ Run the following command to start all services in **detached mode**:
 ```bash
 docker compose up -d
 ```
+
+#### Note: Node version used: v22.14.0
 
 ---
 
