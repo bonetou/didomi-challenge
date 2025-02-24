@@ -23,6 +23,7 @@ export class ConsentEventsService {
   async processConsentEvent(consentEventDto: CreateConsentEventDto) {
     const user = await this.userRepository.findOne({
       where: { id: consentEventDto.userId },
+      withDeleted: false,
     });
 
     if (!user) {

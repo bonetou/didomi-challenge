@@ -4,12 +4,20 @@ import { CreateConsentEventDto } from './dto/create-consent-event.dto';
 import { EventPattern } from '@nestjs/microservices';
 import { CreateUserDto } from './dto/create-user.dto';
 import { DeleteUserDto } from './dto/delete-user.dto';
+import { GlobalApiResponses } from '@app/common';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
+@GlobalApiResponses()
 @Controller('events')
 export class ConsentsController {
   constructor(private readonly consentsService: ConsentEventsService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Process a consent change' })
+  @ApiResponse({
+    status: 201,
+    description: 'Consent event processed successfully',
+  })
   processConsentEvent(@Body() consentEventDto: CreateConsentEventDto) {
     return this.consentsService.processConsentEvent(consentEventDto);
   }
