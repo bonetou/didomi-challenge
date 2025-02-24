@@ -43,6 +43,19 @@ export class ConsentEventsService {
   }
 
   async createUser(createUserDto: CreateUserDto) {
+    const recreatedUser = await this.userRepository.findOne({
+      where: { email: createUserDto.email },
+      withDeleted: true,
+    });
+
+    if (recreatedUser) {
+      await this.userRepository.update(recreatedUser.id, {
+        deletedAt: null,
+        id: createUserDto.userId,
+      });
+      return;
+    }
+
     await this.userRepository.save({
       id: createUserDto.userId,
       email: createUserDto.email,
@@ -50,6 +63,10 @@ export class ConsentEventsService {
   }
 
   async softDeleteUser(userId: string) {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new Error('User not found');
+    }
     await this.userRepository.softDelete(userId);
   }
 }

@@ -39,6 +39,7 @@ describe('ConsentEventsService', () => {
             findOne: jest.fn(),
             save: jest.fn(),
             softDelete: jest.fn(),
+            update: jest.fn(),
           },
         },
         {
@@ -91,23 +92,29 @@ describe('ConsentEventsService', () => {
   });
 
   describe('createUser', () => {
-    it('should save a new user', async () => {
+    it('should restore a soft-deleted user if exists', async () => {
       const createUserDto: CreateUserDto = {
         userId: '1',
         email: 'test@example.com',
       };
+      userRepository.findOne.mockResolvedValue({
+        id: '1',
+        deletedAt: new Date(),
+      } as User);
       await service.createUser(createUserDto);
-      expect(userRepository.save).toHaveBeenCalledWith({
+      expect(userRepository.update).toHaveBeenCalledWith('1', {
+        deletedAt: null,
         id: createUserDto.userId,
-        email: createUserDto.email,
       });
     });
   });
 
   describe('softDeleteUser', () => {
-    it('should soft delete a user', async () => {
-      await service.softDeleteUser('1');
-      expect(userRepository.softDelete).toHaveBeenCalledWith('1');
+    it('should throw an error if user does not exist', async () => {
+      userRepository.findOne.mockResolvedValue(null);
+      await expect(service.softDeleteUser('1')).rejects.toThrow(
+        'User not found',
+      );
     });
   });
 });
