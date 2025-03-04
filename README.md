@@ -43,7 +43,7 @@ I have used one PostgreSQL database for each service and RabbitMQ for messaging 
     /database
 ```
 ## Architecture Overview
-![image](https://github.com/user-attachments/assets/71d36bbd-2fb9-4e17-8dd8-e06fb335c1f3)
+![image](https://github.com/user-attachments/assets/27bcac91-a624-4e43-aa77-c6747d113d07)
 
 ![image](https://github.com/user-attachments/assets/11c9d7c3-28c1-4fa0-addb-c535a96d84b9)
 
